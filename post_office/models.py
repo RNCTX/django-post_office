@@ -39,13 +39,13 @@ class Email(models.Model):
                       (STATUS.queued, _("queued"))]
 
     from_email = models.CharField(_("Email From"), max_length=254,
-                                  validators=[validate_email_with_name])
-    to = CommaSeparatedEmailField(_("Email To"))
-    cc = CommaSeparatedEmailField(_("Cc"))
-    bcc = CommaSeparatedEmailField(_("Bcc"))
+                                  validators=[validate_email_with_name], )
+    to = CommaSeparatedEmailField(_("Email To, comma separated"), widget=forms.TextInput)
+    cc = CommaSeparatedEmailField(_("Cc, comma separated"), widget=forms.TextInput)
+    bcc = CommaSeparatedEmailField(_("Bcc, comma separated"), widget=forms.TexInput)
     subject = models.CharField(_("Subject"), max_length=989, blank=True)
-    message = models.TextField(_("Message"), blank=True)
-    html_message = models.TextField(_("HTML Message"), blank=True)
+    message = models.TextField(_("Text Content"), blank=True, widget=forms.Textarea)
+    html_message = models.TextField(_("HTML Content"), blank=True, widget=forms.Textarea)
     """
     Emails with 'queued' status will get processed by ``send_queued`` command.
     Status field will then be set to ``failed`` or ``sent`` depending on
@@ -239,9 +239,9 @@ class EmailTemplate(models.Model):
     subject = models.CharField(max_length=255, blank=True,
         verbose_name=_("Subject"), validators=[validate_template_syntax])
     content = models.TextField(blank=True,
-        verbose_name=_("Content"), validators=[validate_template_syntax])
+        verbose_name=_("Text Content"), validators=[validate_template_syntax], widget=forms.Textarea)
     html_content = models.TextField(blank=True,
-        verbose_name=_("HTML content"), validators=[validate_template_syntax])
+        verbose_name=_("HTML content"), validators=[validate_template_syntax], widget=forms.Textarea)
     language = models.CharField(max_length=12,
         verbose_name=_("Language"),
         help_text=_("Render template in alternative language"),

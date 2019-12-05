@@ -241,7 +241,7 @@ class EmailTemplate(models.Model):
     content = models.TextField(blank=True,
         verbose_name=_("Text Content"), validators=[validate_template_syntax])
     html_content = models.TextField(blank=True,
-        verbose_name=_("HTML content"), validators=[validate_template_syntax])
+        verbose_name=_("HTML Content"), validators=[validate_template_syntax])
     language = models.CharField(max_length=12,
         verbose_name=_("Language"),
         help_text=_("Render template in alternative language"),

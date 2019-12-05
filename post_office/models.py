@@ -40,12 +40,12 @@ class Email(models.Model):
 
     from_email = models.CharField(_("Email From"), max_length=254,
                                   validators=[validate_email_with_name], )
-    to = CommaSeparatedEmailField(_("Email To, comma separated"), widget=forms.TextInput)
-    cc = CommaSeparatedEmailField(_("Cc, comma separated"), widget=forms.TextInput)
-    bcc = CommaSeparatedEmailField(_("Bcc, comma separated"), widget=forms.TexInput)
+    to = CommaSeparatedEmailField(_("Email To, comma separated"))
+    cc = CommaSeparatedEmailField(_("Cc, comma separated"))
+    bcc = CommaSeparatedEmailField(_("Bcc, comma separated"))
     subject = models.CharField(_("Subject"), max_length=989, blank=True)
-    message = models.TextField(_("Text Content"), blank=True, widget=forms.Textarea)
-    html_message = models.TextField(_("HTML Content"), blank=True, widget=forms.Textarea)
+    message = models.TextField(_("Text Content"), blank=True)
+    html_message = models.TextField(_("HTML Content"), blank=True)
     """
     Emails with 'queued' status will get processed by ``send_queued`` command.
     Status field will then be set to ``failed`` or ``sent`` depending on
@@ -60,7 +60,7 @@ class Email(models.Model):
                                                 blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     last_updated = models.DateTimeField(db_index=True, auto_now=True)
-    scheduled_time = models.DateTimeField(_('The scheduled sending time'),
+    scheduled_time = models.DateTimeField(_('Scheduled sending time'),
                                           blank=True, null=True, db_index=True)
     headers = JSONField(_('Headers'), blank=True, null=True)
     template = models.ForeignKey('post_office.EmailTemplate', blank=True,
@@ -239,9 +239,9 @@ class EmailTemplate(models.Model):
     subject = models.CharField(max_length=255, blank=True,
         verbose_name=_("Subject"), validators=[validate_template_syntax])
     content = models.TextField(blank=True,
-        verbose_name=_("Text Content"), validators=[validate_template_syntax], widget=forms.Textarea)
+        verbose_name=_("Text Content"), validators=[validate_template_syntax])
     html_content = models.TextField(blank=True,
-        verbose_name=_("HTML content"), validators=[validate_template_syntax], widget=forms.Textarea)
+        verbose_name=_("HTML content"), validators=[validate_template_syntax])
     language = models.CharField(max_length=12,
         verbose_name=_("Language"),
         help_text=_("Render template in alternative language"),
@@ -292,7 +292,7 @@ class Attachment(models.Model):
     A model describing an email attachment.
     """
     file = models.FileField(_('File'), upload_to=get_upload_path)
-    name = models.CharField(_('Name'), max_length=255, help_text=_("The original filename"))
+    name = models.CharField(_('Name'), max_length=255, help_text=_("The template name"))
     emails = models.ManyToManyField(Email, related_name='attachments',
                                     verbose_name=_('Email addresses'))
     mimetype = models.CharField(max_length=255, default='', blank=True)

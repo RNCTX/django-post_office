@@ -40,6 +40,9 @@ class Email(models.Model):
 
     from_email = models.CharField(_("Email From"), max_length=254,
                                   validators=[validate_email_with_name], help_text=_("Must have permission to send through the default server!"))
+    group = models.ForeignKey('auth.group', blank=True, null=True, 
+                              verbose_name=_('To Group'), 
+                              on_delete=models.SET_NULL)
     to = CommaSeparatedEmailField(_("To"), help_text=_("Separate multiple addresses with a comma."))
     cc = CommaSeparatedEmailField(_("Cc"), help_text=_("Separate multiple addresses with a comma."))
     bcc = CommaSeparatedEmailField(_("Bcc"), help_text=_("Separate multiple addresses with a comma."))

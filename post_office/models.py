@@ -32,6 +32,11 @@ class Email(models.Model):
     """
     A model to hold email information.
     """
+    from django.contrib.auth import get_user_model
+    from django.contrib.auth.models import Group
+    from django.db.models import Q
+    from django.conf import settings
+    User = get_user_model()
 
     PRIORITY_CHOICES = [(PRIORITY.low, _("low")), (PRIORITY.medium, _("medium")),
                         (PRIORITY.high, _("high")), (PRIORITY.now, _("now"))]
@@ -41,8 +46,8 @@ class Email(models.Model):
     from_email = models.CharField(_("Email From"), max_length=254,
                                   validators=[validate_email_with_name], help_text=_("Must have permission to send through the default server!"))
     group = models.ForeignKey('auth.group', blank=True, null=True, 
-                                help_text=_("Optional, will be added to the list of recipients specified in the to field."),
-                                verbose_name=_('Also send to group'), 
+                                help_text=_("The email recipients."),
+                                verbose_name=_('Send to group'), 
                                 on_delete=models.SET_NULL)
     to = CommaSeparatedEmailField(_("To"), help_text=_("Separate multiple addresses with a comma."))
     cc = CommaSeparatedEmailField(_("Cc"), help_text=_("Separate multiple addresses with a comma."))
@@ -199,7 +204,6 @@ class Email(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()
         return super(Email, self).save(*args, **kwargs)
-
 
 @python_2_unicode_compatible
 class Log(models.Model):

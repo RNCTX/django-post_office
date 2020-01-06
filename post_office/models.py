@@ -239,17 +239,23 @@ class EmailTemplate(models.Model):
     """
     Model to hold template information from db
     """
-    name = models.CharField(_('Name'), max_length=255, help_text=_("e.g: 'welcome_email'"))
+    name = models.CharField(_('Name'), max_length=255, help_text=_("ex: 'welcome_email'"))
     description = models.TextField(_('Description'), blank=True,
                                    help_text=_("Description of this template."))
     created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     subject = models.CharField(max_length=255, blank=True,
-        verbose_name=_("Subject"), validators=[validate_template_syntax])
+        verbose_name=_("Subject"), 
+        help_text=_("The email subject."), 
+        validators=[validate_template_syntax])
     content = models.TextField(blank=True,
-        verbose_name=_("Text Content"), validators=[validate_template_syntax])
+        verbose_name=_("Text Content"),
+        help_text=_("Optional. Plain text message for users who have HTML email disabled."), 
+        validators=[validate_template_syntax])
     html_content = models.TextField(blank=True,
-        verbose_name=_("HTML Content"), validators=[validate_template_syntax])
+        verbose_name=_("HTML Content"),
+        help_text=_("Email HTML body. Context variables available for personalisation, ex: {{ first_name }} {{ last_name }} returns Joe Smith"), 
+        validators=[validate_template_syntax])
     language = models.CharField(max_length=12,
         verbose_name=_("Language"),
         help_text=_("Render template in alternative language"),

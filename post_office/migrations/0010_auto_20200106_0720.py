@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='emailtemplate',
             name='content',
-            field=models.TextField(blank=True, help_text='Optional. Plain text message for users who have HTML email disabled.', validators=[post_office.validators.validate_template_syntax], verbose_name='Text Content'),
+            field=models.TextField(blank=True, help_text='Plain text message for users who have HTML email disabled.', validators=[post_office.validators.validate_template_syntax], verbose_name='Text Content'),
         ),
         migrations.AlterField(
             model_name='emailtemplate',

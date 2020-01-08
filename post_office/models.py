@@ -250,7 +250,7 @@ class EmailTemplate(models.Model):
         validators=[validate_template_syntax])
     content = models.TextField(blank=True,
         verbose_name=_("Text Content"),
-        help_text=_("Optional. Plain text message for users who have HTML email disabled."), 
+        help_text=_("Plain text message for users who have HTML email disabled."), 
         validators=[validate_template_syntax])
     html_content = models.TextField(blank=True,
         verbose_name=_("HTML Content"),

@@ -7,7 +7,10 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.db.models import Q
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.utils.timezone import now
+from users.tokens import unsubscribe_token
 
 from ...lockfile import FileLock, FileLocked
 from ...mail import send_queued, send_many
@@ -54,13 +57,23 @@ class Command(BaseCommand):
                         if group_emails:
                             kwargs_list = []
                             for email in group_emails:
-                                group_emails_users = User.objects.filter(Q(groups__id=email.group_id))
+                                group_emails_users = User.objects.filter(Q(groups__id=email.group_id, subscribe=True))
 
                                 for user in group_emails_users:
-                                    user.id = {'sender': settings.DEFAULT_FROM_EMAIL, \
-                                    'recipients': user.email, 'template': email.template, \
-                                    'render_on_delivery': True, \
-                                    'context': {'first_name': user.first_name, 'last_name': user.last_name, 'id': user.ext_id}}
+                                    token = unsubscribe_token.make_token(user)
+                                    uid = urlsafe_base64_encode(force_bytes(user.email))
+                                    unsub_link = settings.BASE_URL + '/unsubscribe/' + uid + '/' + token + '/'
+                                    user.id = {
+                                        'sender': settings.DEFAULT_FROM_EMAIL,
+                                        'recipients': user.email,
+                                        'template': email.template,
+                                        'render_on_delivery': True,
+                                        'context': {
+                                            'first_name': user.first_name, 
+                                            'last_name': user.last_name, 
+                                            'unsubscribe': unsub_link
+                                        }
+                                    }
                                     
                                     kwargs_list.append(user.id)
                                     

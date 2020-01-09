@@ -278,11 +278,12 @@ def _send_bulk(emails, uses_multiprocessing=True, log_level=None):
 
         logs = []
         for (email, exception) in failed_emails:
-            logs.append(
-                Log(email=email, status=STATUS.failed,
-                    message=str(exception),
-                    exception_type=type(exception).__name__)
-            )
+            if len(email.to) > 0:
+                logs.append(
+                    Log(email=email, status=STATUS.failed,
+                        message=str(exception),
+                        exception_type=type(exception).__name__)
+                )
 
         if logs:
             Log.objects.bulk_create(logs)

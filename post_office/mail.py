@@ -281,7 +281,7 @@ def _send_bulk(emails, uses_multiprocessing=True, log_level=None):
             if len(email.to) > 0:
                 logs.append(
                     Log(email=email, status=STATUS.failed,
-                        message=str(exception),
+                        message=str(exception).replace('(', '').replace(')', '').replace(', b', ': '),
                         exception_type=type(exception).__name__)
                 )
 

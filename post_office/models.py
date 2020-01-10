@@ -46,15 +46,15 @@ class Email(models.Model):
     from_email = models.CharField(_("Email From"), max_length=254,
                                   validators=[validate_email_with_name], help_text=_("Must have permission to send through the default server!"))
     group = models.ForeignKey('auth.group', blank=True, null=True, 
-                                help_text=_("The email recipients."),
+                                help_text=_("Send email to all members of a group."),
                                 verbose_name=_('Send to group'), 
                                 on_delete=models.SET_NULL)
-    to = CommaSeparatedEmailField(_("To"), help_text=_("Separate multiple addresses with a comma."))
-    cc = CommaSeparatedEmailField(_("Cc"), help_text=_("Separate multiple addresses with a comma."))
-    bcc = CommaSeparatedEmailField(_("Bcc"), help_text=_("Separate multiple addresses with a comma."))
-    subject = models.CharField(_("Subject"), max_length=989, blank=True)
-    message = models.TextField(_("Text Content"), blank=True)
-    html_message = models.TextField(_("HTML Content"), blank=True)
+    to = CommaSeparatedEmailField(_("Email To"), help_text=_("Optional (if no group of recipients selected), separate addresses with a comma."))
+    cc = CommaSeparatedEmailField(_("Email Cc"), help_text=_("Optional, separate multiple addresses with a comma."))
+    bcc = CommaSeparatedEmailField(_("Email Bcc"), help_text=_("Optional, separate multiple addresses with a comma."))
+    subject = models.CharField(_("Subject"), max_length=989, blank=True, help_text=_('Leave this blank if sending content by a template!'))
+    message = models.TextField(_("Text Content"), blank=True, help_text=_('Leave this blank if sending content by a template!'))
+    html_message = models.TextField(_("HTML Content"), blank=True, help_text=_('Leave this blank if sending content by a template!'))
     """
     Emails with 'queued' status will get processed by ``send_queued`` command.
     Status field will then be set to ``failed`` or ``sent`` depending on
@@ -73,6 +73,7 @@ class Email(models.Model):
                                           blank=True, null=True, db_index=True)
     headers = JSONField(_('Headers'), blank=True, null=True)
     template = models.ForeignKey('post_office.EmailTemplate', blank=True,
+                                help_text=_('If selected, will replace subject, plain-text content, and html content with content from the chosen template.'),
                                  null=True, verbose_name=_('Email template'),
                                  on_delete=models.CASCADE)
     context = context_field_class(_('Context'), blank=True, null=True)

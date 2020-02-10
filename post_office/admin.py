@@ -155,4 +155,4 @@ class AttachmentAdmin(admin.ModelAdmin):
 admin.site.register(Email, EmailAdmin)
 admin.site.register(Log, LogAdmin)
 admin.site.register(EmailTemplate, EmailTemplateAdmin)
-admin.site.register(Attachment, AttachmentAdmin)
+# admin.site.register(Attachment, AttachmentAdmin)

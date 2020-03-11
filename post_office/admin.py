@@ -117,7 +117,7 @@ class EmailTemplateInline(admin.StackedInline):
 
 class EmailTemplateAdmin(admin.ModelAdmin):
     form = EmailTemplateAdminForm
-    list_display = ('name', 'description_shortened', 'subject', 'languages_compact', 'created')
+    list_display = ('name', 'description_shortened', 'subject', 'languages_compact')
     search_fields = ('name', 'description', 'subject')
     fieldsets = [
         (None, {

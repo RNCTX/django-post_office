@@ -69,8 +69,6 @@ class Command(BaseCommand):
                                         'template': email.template,
                                         'render_on_delivery': True,
                                         'context': {
-                                            'user.first_name': user.first_name,
-                                            'user.last_name': user.last_name,
                                             'first_name': user.first_name, 
                                             'last_name': user.last_name, 
                                             'unsubscribe': unsub_link

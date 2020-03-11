@@ -256,7 +256,7 @@ class EmailTemplate(models.Model):
         validators=[validate_template_syntax])
     html_content = models.TextField(blank=True,
         verbose_name=_("HTML Content"),
-        help_text=_("Email HTML body. Context variables available for personalisation, ex: {{ user.first_name }} {{ user.last_name }} returns Joe Smith"), 
+        help_text=_("Email HTML body. Context variables available for personalisation, ex: {{ first_name }} {{ last_name }} returns Joe Smith"), 
         validators=[validate_template_syntax])
     language = models.CharField(max_length=12,
         verbose_name=_("Language"),
